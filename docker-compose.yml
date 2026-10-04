@@ -1,0 +1,66 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: streamhub-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: streamhub_user
+      POSTGRES_PASSWORD: streamhub_password
+      POSTGRES_DB: streamhub
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U streamhub_user -d streamhub"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  migrate:
+    image: migrate/migrate
+    container_name: streamhub-migrate
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./migrations:/migrations:ro
+    command:
+      - -path=/migrations
+      - -database=postgres://streamhub_user:streamhub_password@postgres:5432/streamhub?sslmode=disable
+      - up
+    restart: on-failure
+
+  redis:
+    image: redis:7
+    container_name: streamhub-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "PING"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  minio:
+    image: minio/minio:latest
+    container_name: streamhub-minio
+    restart: unless-stopped
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    command: server /data --console-address ":9001"
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+
+volumes:
+  pgdata:
+  redis_data:
+  minio_data:

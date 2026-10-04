@@ -1,0 +1,110 @@
+# Application Configuration
+app:
+  name: stream-hub
+  version: 1.0.0
+  environment: development # development, staging, production
+
+# Database Configuration
+database:
+  host: postgres
+  port: 5432
+  user: streamhub_user
+  password: streamhub_password
+  name: streamhub
+  sslmode: disable
+  pool:
+    max_connections: 25
+    min_connections: 5
+    max_conn_lifetime: 5m
+    max_conn_idle_time: 1m
+    health_check_period: 1m
+
+# JWT Configuration
+jwt:
+  secret: super-secret
+  expiry: 24h
+  issuer: stream-hub
+
+# Service Ports
+services:
+  auth:
+    port: 50051
+    host: streamhub-auth
+
+  file:
+    port: 50059
+    host: streamhub-file
+
+  chat:
+    port: 50053
+    host: streamhub-channel
+  payment:
+    port: 50060
+    host: streamhub-payment
+  gateway:
+    port: 8080
+    host: streamhub-gateway
+  front:
+    host: localhost
+    port: 5173
+# Logging Configuration
+logging:
+  level: info # debug, info, warn, error
+  format: json # json or console
+  output: stdout
+
+# Server Configuration
+server:
+  read_timeout: 15s
+  write_timeout: 15s
+  idle_timeout: 60s
+  shutdown_timeout: 30s
+
+sendgrid:
+  magic_id: d-2fcd69e42e22485db945d8963229763d
+  otp_id: d-3018e88c52f34cb1ad5d227d5ad0bef9
+  admin_info: d-393e85b9727a4e48bba8e96b5c82a78c
+
+# Redis
+redis:
+  host: streamhub-redis
+  port: 6379
+  db: 0
+  password: ""
+  ttl:
+    upload_session: 10m
+    presign: 5m
+
+# MinIO / S3
+minio:
+  endpoint: streamhub-minio:9000  
+  public_endpoint: localhost:9000
+  access_key: minioadmin
+  secret_key: minioadmin
+  bucket: channel-uploads
+  region: us-east-1
+  use_ssl: false
+
+# File Service
+file_service:
+  upload_url_expiry: 15m
+  download_url_expiry: 30m
+  max_upload_size: 50MB
+  allowed_mime_types:
+    - image/jpeg
+    - image/png
+    - application/pdf
+    - video/mp4
+  antivirus:
+    enabled: false
+    host: clamav
+    port: 3310
+
+cloudinary:
+  cloud_name: dersnukrf
+  api_key: 388271549966182
+
+#  test mode
+razorpay:
+  secret_key: 
+  publishable_key: rzp_test_RqwWzgHgoIe4Eu

@@ -3,7 +3,7 @@ package middleware
 import (
 	"time"
 
-	"github.com/ak-repo/stream-hub/pkg/logger"
+	"github.com/ak-repo/stream-hub/internal/platform/logger"
 	"github.com/gofiber/fiber/v2"
 	"go.uber.org/zap"
 )

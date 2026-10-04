@@ -7,21 +7,21 @@ import (
 	"net"
 	"time"
 
-	"github.com/ak-repo/stream-hub/config"
 	"github.com/ak-repo/stream-hub/gen/authpb"
-	authcloudinary "github.com/ak-repo/stream-hub/internal/auth_service/adapter/cloudinary"
-	authgrpc "github.com/ak-repo/stream-hub/internal/auth_service/adapter/grpc"
-	"github.com/ak-repo/stream-hub/internal/auth_service/adapter/postgres"
-	otpredis "github.com/ak-repo/stream-hub/internal/auth_service/adapter/redis"
-	"github.com/ak-repo/stream-hub/internal/auth_service/app"
+	authcloudinary "github.com/ak-repo/stream-hub/internal/auth/adapter/cloudinary"
+	authgrpc "github.com/ak-repo/stream-hub/internal/auth/adapter/grpc"
+	"github.com/ak-repo/stream-hub/internal/auth/adapter/postgres"
+	otpredis "github.com/ak-repo/stream-hub/internal/auth/adapter/redis"
+	"github.com/ak-repo/stream-hub/internal/auth/app"
+	"github.com/ak-repo/stream-hub/internal/platform/config"
 
-	"github.com/ak-repo/stream-hub/pkg/db"
-	"github.com/ak-repo/stream-hub/pkg/db/seeder"
-	"github.com/ak-repo/stream-hub/pkg/grpc/interceptors"
-	"github.com/ak-repo/stream-hub/pkg/helper"
-	"github.com/ak-repo/stream-hub/pkg/jwt"
-	"github.com/ak-repo/stream-hub/pkg/logger"
-	redisclient "github.com/ak-repo/stream-hub/pkg/redis"
+	platformdb "github.com/ak-repo/stream-hub/internal/platform/postgres"
+
+	"github.com/ak-repo/stream-hub/internal/platform/grpc/interceptors"
+	"github.com/ak-repo/stream-hub/internal/platform/helper"
+	"github.com/ak-repo/stream-hub/internal/platform/jwt"
+	"github.com/ak-repo/stream-hub/internal/platform/logger"
+	redisclient "github.com/ak-repo/stream-hub/internal/platform/redis"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 )
@@ -37,7 +37,7 @@ func main() {
 	defer logger.Sync()
 
 	//db
-	pgDB, err := db.NewPostgresDB(context.Background(), cfg)
+	pgDB, err := platformdb.NewPostgresDB(context.Background(), cfg)
 	if err != nil {
 		log.Fatal("failed to connect db:", zap.Error(err))
 	}
@@ -55,7 +55,7 @@ func main() {
 	otpStore := otpredis.NewOTPStore(rClient, 10*time.Minute)
 
 	cloudCli, err := authcloudinary.NewCloudinaryUploader(cfg.Cloudinary.CloudName, cfg.Cloudinary.APIKey, cfg.Cloudinary.APISecret)
-	seeder.UsersSeeder(context.Background(), pgDB.Pool)
+	postgres.UsersSeeder(context.Background(), pgDB.Pool)
 	if err != nil {
 		log.Fatal("cloudinary staring failed, ", err.Error())
 	}
@@ -64,7 +64,6 @@ func main() {
 	repo := postgres.NewUserRepository(pgDB.Pool)
 	service := app.NewAuthService(repo, jwtMan, cfg, otpStore, cloudCli)
 	server := authgrpc.NewServer(service)
-
 
 	addr := fmt.Sprintf(":%s", cfg.Services.Auth.Port)
 	lis, err := net.Listen("tcp", addr)

@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/ak-repo/stream-hub/config"
 	"github.com/ak-repo/stream-hub/internal/gateway/routes"
-	"github.com/ak-repo/stream-hub/pkg/grpc/clients"
-	"github.com/ak-repo/stream-hub/pkg/helper"
-	"github.com/ak-repo/stream-hub/pkg/logger"
+	"github.com/ak-repo/stream-hub/internal/platform/config"
+	"github.com/ak-repo/stream-hub/internal/platform/grpc/clients"
+	"github.com/ak-repo/stream-hub/internal/platform/helper"
+	"github.com/ak-repo/stream-hub/internal/platform/logger"
 	"github.com/gofiber/fiber/v2"
 	fiberlogger "github.com/gofiber/fiber/v2/middleware/logger"
 )

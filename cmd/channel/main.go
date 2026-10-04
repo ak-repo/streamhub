@@ -6,18 +6,18 @@ import (
 	"log"
 	"net"
 
-	"github.com/ak-repo/stream-hub/config"
 	"github.com/ak-repo/stream-hub/gen/channelpb"
-	channelgrpc "github.com/ak-repo/stream-hub/internal/channel_service/adapter/grpc"
-	"github.com/ak-repo/stream-hub/internal/channel_service/adapter/postgres"
-	chatredis "github.com/ak-repo/stream-hub/internal/channel_service/adapter/redis"
-	"github.com/ak-repo/stream-hub/internal/channel_service/app"
-	"github.com/ak-repo/stream-hub/pkg/db"
-	"github.com/ak-repo/stream-hub/pkg/grpc/clients"
-	"github.com/ak-repo/stream-hub/pkg/grpc/interceptors"
-	"github.com/ak-repo/stream-hub/pkg/helper"
-	"github.com/ak-repo/stream-hub/pkg/logger"
-	redisclient "github.com/ak-repo/stream-hub/pkg/redis"
+	channelgrpc "github.com/ak-repo/stream-hub/internal/channel/adapter/grpc"
+	"github.com/ak-repo/stream-hub/internal/channel/adapter/postgres"
+	chatredis "github.com/ak-repo/stream-hub/internal/channel/adapter/redis"
+	"github.com/ak-repo/stream-hub/internal/channel/app"
+	"github.com/ak-repo/stream-hub/internal/platform/config"
+	"github.com/ak-repo/stream-hub/internal/platform/grpc/clients"
+	"github.com/ak-repo/stream-hub/internal/platform/grpc/interceptors"
+	"github.com/ak-repo/stream-hub/internal/platform/helper"
+	"github.com/ak-repo/stream-hub/internal/platform/logger"
+	platformdb "github.com/ak-repo/stream-hub/internal/platform/postgres"
+	redisclient "github.com/ak-repo/stream-hub/internal/platform/redis"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 )
@@ -37,7 +37,7 @@ func main() {
 	ctx := context.Background()
 
 	// 2. Initialize PostgreSQL
-	pgDB, err := db.NewPostgresDB(ctx, cfg)
+	pgDB, err := platformdb.NewPostgresDB(ctx, cfg)
 	if err != nil {
 		log.Fatal("failed to connect to database:", zap.Error(err))
 	}

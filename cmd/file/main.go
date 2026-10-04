@@ -7,19 +7,19 @@ import (
 	"net"
 	"time"
 
-	"github.com/ak-repo/stream-hub/config"
 	"github.com/ak-repo/stream-hub/gen/filespb"
-	filegrpc "github.com/ak-repo/stream-hub/internal/files_service/adapter/grpc"
-	repository "github.com/ak-repo/stream-hub/internal/files_service/adapter/postgres"
-	redisstore "github.com/ak-repo/stream-hub/internal/files_service/adapter/redis"
-	"github.com/ak-repo/stream-hub/internal/files_service/adapter/storage"
-	"github.com/ak-repo/stream-hub/internal/files_service/app"
-	"github.com/ak-repo/stream-hub/pkg/db"
-	"github.com/ak-repo/stream-hub/pkg/grpc/clients"
-	"github.com/ak-repo/stream-hub/pkg/grpc/interceptors"
-	"github.com/ak-repo/stream-hub/pkg/helper"
-	"github.com/ak-repo/stream-hub/pkg/logger"
-	redisclient "github.com/ak-repo/stream-hub/pkg/redis"
+	filegrpc "github.com/ak-repo/stream-hub/internal/file/adapter/grpc"
+	repository "github.com/ak-repo/stream-hub/internal/file/adapter/postgres"
+	redisstore "github.com/ak-repo/stream-hub/internal/file/adapter/redis"
+	"github.com/ak-repo/stream-hub/internal/file/adapter/storage"
+	"github.com/ak-repo/stream-hub/internal/file/app"
+	"github.com/ak-repo/stream-hub/internal/platform/config"
+	"github.com/ak-repo/stream-hub/internal/platform/grpc/clients"
+	"github.com/ak-repo/stream-hub/internal/platform/grpc/interceptors"
+	"github.com/ak-repo/stream-hub/internal/platform/helper"
+	"github.com/ak-repo/stream-hub/internal/platform/logger"
+	platformdb "github.com/ak-repo/stream-hub/internal/platform/postgres"
+	redisclient "github.com/ak-repo/stream-hub/internal/platform/redis"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 )
@@ -37,7 +37,7 @@ func main() {
 	defer logger.Sync()
 
 	//db
-	pgDB, err := db.NewPostgresDB(context.Background(), cfg)
+	pgDB, err := platformdb.NewPostgresDB(context.Background(), cfg)
 	if err != nil {
 		log.Fatal("failed to connect db:", zap.Error(err))
 	}

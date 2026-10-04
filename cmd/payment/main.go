@@ -7,20 +7,20 @@ import (
 	"net"
 	"time"
 
-	"github.com/ak-repo/stream-hub/config"
 	"github.com/ak-repo/stream-hub/gen/paymentpb"
-	paymentgrpc "github.com/ak-repo/stream-hub/internal/payment_service/adapter/grpc"
-	"github.com/ak-repo/stream-hub/internal/payment_service/adapter/pay"
-	"github.com/ak-repo/stream-hub/internal/payment_service/adapter/postgres"
-	paymentredis "github.com/ak-repo/stream-hub/internal/payment_service/adapter/redis"
+	paymentgrpc "github.com/ak-repo/stream-hub/internal/payment/adapter/grpc"
+	"github.com/ak-repo/stream-hub/internal/payment/adapter/pay"
+	"github.com/ak-repo/stream-hub/internal/payment/adapter/postgres"
+	paymentredis "github.com/ak-repo/stream-hub/internal/payment/adapter/redis"
+	"github.com/ak-repo/stream-hub/internal/platform/config"
 
-	"github.com/ak-repo/stream-hub/internal/payment_service/app"
-	"github.com/ak-repo/stream-hub/pkg/db"
-	"github.com/ak-repo/stream-hub/pkg/grpc/clients"
-	"github.com/ak-repo/stream-hub/pkg/grpc/interceptors"
-	"github.com/ak-repo/stream-hub/pkg/helper"
-	"github.com/ak-repo/stream-hub/pkg/logger"
-	redisclient "github.com/ak-repo/stream-hub/pkg/redis"
+	"github.com/ak-repo/stream-hub/internal/payment/app"
+	"github.com/ak-repo/stream-hub/internal/platform/grpc/clients"
+	"github.com/ak-repo/stream-hub/internal/platform/grpc/interceptors"
+	"github.com/ak-repo/stream-hub/internal/platform/helper"
+	"github.com/ak-repo/stream-hub/internal/platform/logger"
+	platformdb "github.com/ak-repo/stream-hub/internal/platform/postgres"
+	redisclient "github.com/ak-repo/stream-hub/internal/platform/redis"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 )
@@ -43,7 +43,7 @@ func main() {
 	defer logger.Sync()
 
 	//db
-	pgDB, err := db.NewPostgresDB(context.Background(), cfg)
+	pgDB, err := platformdb.NewPostgresDB(context.Background(), cfg)
 	if err != nil {
 		log.Fatal("failed to connect db:", zap.Error(err))
 	}

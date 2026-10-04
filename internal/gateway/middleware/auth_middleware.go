@@ -3,7 +3,7 @@ package middleware
 import (
 	"strings"
 
-	"github.com/ak-repo/stream-hub/pkg/jwt"
+	"github.com/ak-repo/stream-hub/internal/platform/jwt"
 	"github.com/gofiber/fiber/v2"
 )
 

@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/ak-repo/stream-hub/gen/channelpb"
-	"github.com/ak-repo/stream-hub/pkg/logger"
+	"github.com/ak-repo/stream-hub/internal/platform/logger"
 	"github.com/gofiber/websocket/v2"
 	"go.uber.org/zap"
 )

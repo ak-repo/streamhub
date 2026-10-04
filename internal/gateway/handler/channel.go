@@ -5,9 +5,9 @@ import (
 	"log"
 
 	"github.com/ak-repo/stream-hub/gen/channelpb"
-	"github.com/ak-repo/stream-hub/pkg/errors"
-	"github.com/ak-repo/stream-hub/pkg/helper"
-	"github.com/ak-repo/stream-hub/pkg/response"
+	errors "github.com/ak-repo/stream-hub/internal/platform/apperror"
+	"github.com/ak-repo/stream-hub/internal/platform/helper"
+	"github.com/ak-repo/stream-hub/internal/platform/response"
 	"github.com/gofiber/fiber/v2"
 )
 

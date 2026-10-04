@@ -1,1 +1,19 @@
+# Go
+/bin/
+*.test
+*.out
+coverage.*
+
+# Frontend
+/web/node_modules/
+/web/dist/
+
+# Local configuration and tools
+.env
+.env.*
+.idea/
+.vscode/
+.DS_Store
+
+# Scratch files
 dummy/

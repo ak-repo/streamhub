@@ -6,7 +6,7 @@ COMPOSE ?= docker compose
 
 .DEFAULT_GOAL := help
 
-.PHONY: help install docker-up docker-down docker-restart docker-logs docker-ps migrate \
+.PHONY: help install proto-tools proto docker-up docker-down docker-restart docker-logs docker-ps migrate \
 	auth channel file payment gateway services frontend dev test build lint
 
 help: ## Show the available commands
@@ -15,6 +15,13 @@ help: ## Show the available commands
 install: ## Download Go modules and install frontend dependencies
 	$(GO) mod download
 	$(NPM) --prefix web ci
+
+proto-tools: ## Install the pinned protobuf generators
+	$(GO) install google.golang.org/protobuf/cmd/protoc-gen-go@v1.36.10
+	$(GO) install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.5.1
+
+proto: proto-tools ## Generate Go and gRPC code from protobuf contracts
+	PATH="$$($(GO) env GOPATH)/bin:$$PATH" protoc --go_out=. --go-grpc_out=. api/proto/*.proto
 
 docker-up: ## Start PostgreSQL, Redis, MinIO, and run migrations
 	$(COMPOSE) up -d postgres redis minio

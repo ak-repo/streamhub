@@ -1,11 +1,11 @@
 package routes
 
 import (
-	"github.com/ak-repo/stream-hub/config"
 	"github.com/ak-repo/stream-hub/internal/gateway/handler"
 	"github.com/ak-repo/stream-hub/internal/gateway/middleware"
-	"github.com/ak-repo/stream-hub/pkg/grpc/clients"
-	"github.com/ak-repo/stream-hub/pkg/jwt"
+	"github.com/ak-repo/stream-hub/internal/platform/config"
+	"github.com/ak-repo/stream-hub/internal/platform/grpc/clients"
+	"github.com/ak-repo/stream-hub/internal/platform/jwt"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/websocket/v2"
@@ -31,8 +31,6 @@ func New(app *fiber.App, cfg *config.Config, clients *clients.Clients) {
 	userRoutes(api, cfg, clients)
 
 }
-
-
 
 func adminRoutes(api fiber.Router, clients *clients.Clients, cfg *config.Config) {
 
@@ -64,8 +62,6 @@ func adminRoutes(api fiber.Router, clients *clients.Clients, cfg *config.Config)
 	adminR.Delete("/files/:id", handler.DeleteFile)
 
 }
-
-
 
 func userRoutes(api fiber.Router, cfg *config.Config, clients *clients.Clients) {
 	jwtMan := jwt.NewJWTManager(cfg.JWT.Secret, cfg.JWT.Expiry, cfg.JWT.Expiry*7)

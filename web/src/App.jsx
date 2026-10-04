@@ -14,7 +14,7 @@ import ChannelProvider from "./context/ChannelProvider";
 import AuthPage from "./pages/auth/AuthPage";
 import EmailVerification from "./pages/auth/EmailVerification";
 import EmailVerified from "./pages/auth/EmailVerified";
-import ForgotPassword from "./pages/auth/ForgetPassword";
+import ForgotPassword from "./pages/auth/ForgotPassword";
 
 /* --- User Pages --- */
 import HomeLayout from "./pages/user/HomeLayout";

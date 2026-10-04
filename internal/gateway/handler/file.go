@@ -6,9 +6,9 @@ import (
 	"time"
 
 	"github.com/ak-repo/stream-hub/gen/filespb"
-	"github.com/ak-repo/stream-hub/pkg/errors"
-	"github.com/ak-repo/stream-hub/pkg/helper"
-	"github.com/ak-repo/stream-hub/pkg/response"
+	errors "github.com/ak-repo/stream-hub/internal/platform/apperror"
+	"github.com/ak-repo/stream-hub/internal/platform/helper"
+	"github.com/ak-repo/stream-hub/internal/platform/response"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -150,7 +150,3 @@ func (h *FileHandler) DeleteFile(c *fiber.Ctx) error {
 
 	return response.Success(c, "file deleted successfully", resp)
 }
-
-
-
-
